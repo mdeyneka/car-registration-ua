@@ -1,36 +1,14 @@
 package main
 
 import (
-	"log"
-
-	"github.com/caarlos0/env/v6"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	"github.com/mdeineka/car-registration-ua/internal/config"
 	"github.com/mdeineka/car-registration-ua/internal/controllers"
+	"github.com/mdeineka/car-registration-ua/internal/database"
 )
 
-type Config struct {
-	DbHost     string `env:"DB_HOST,required"`
-	DbUser     string `env:"DB_USER,required"`
-	DbPassword string `env:"DB_PASSWORD,required"`
-	DbName     string `env:"DB_NAME,required"`
-	DBbPort    int    `env:"DB_PORT,required"`
-}
-
 func main() {
-
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Unable to load .env file: %e", err)
-	}
-
-	cfg := Config{}
-
-	err = env.Parse(&cfg)
-	if err != nil {
-		log.Fatalf("Unable to parse ennvironment variables: %e", err)
-	}
-
+	database.Init(config.Dbconfig)
 	router := gin.Default()
 	v1_group := router.Group("/v1")
 	{
