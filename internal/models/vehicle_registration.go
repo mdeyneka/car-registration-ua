@@ -5,25 +5,25 @@ import (
 )
 
 type VehicleRegistration struct {
-	ID                    string    `json:"id"`
-	Person                string    `json:"person"`
-	RegistrationAddress   string    `json:"reg_address"`
-	OperationCode         uint16    `json:"op_code"`
-	OperationName         string    `json:"op_name"`
-	RegistrationDate      time.Time `json:"reg_date"`
-	DepartmentCode        uint16    `json:"dep_code"`
-	DepartmentName        string    `json:"dep_name"`
-	Brand                 string    `json:"brand"`
-	Model                 string    `json:"model"`
-	VIN                   string    `json:"vin"`
-	ProductionYear        uint16    `json:"prod_year"`
-	Color                 string    `json:"color"`
-	VehicleType           string    `json:"veh_type"`
-	VehicleBody           string    `json:"veh_body"`
-	Purpose               string    `json:"purpose"`
-	FuelType              string    `json:"fuel_type"`
-	EngineCapacity        uint16    `json:"eng_cap"`
-	OwnWeight             uint16    `json:"own_weight"`
-	TotalWeight           uint16    `json:"total_weight"`
-	NewRegistrationNumber string    `json:"new_reg_num"`
+	ID                    uint32    `gorm:"primaryKey"`
+	Person                string    `gorm:"type:varchar(1)" json:"person"`
+	RegistrationAddress   string    `gorm:"type:varchar(10);column:registrationaddress" json:"reg_address"`
+	OperationCode         uint16    `gorm:"type:uint16;column:operationcode" json:"op_code"`
+	OperationName         string    `gorm:"type:varchar(255);column:operationname" json:"op_name"`
+	RegistrationDate      time.Time `gorm:"type:time;column:registrationdate" json:"reg_date"`
+	DepartmentCode        uint16    `gorm:"type:uint16;column:departmentcode" json:"dep_code"`
+	DepartmentName        string    `gorm:"type:varchar(64);column:departmentname" json:"dep_name"`
+	VehicleBrand          string    `gorm:"type:varchar(32);column:brand" json:"veh_brand"`
+	VehicleModel          string    `gorm:"type:varchar(32);column:model" json:"veh_model"`
+	VIN                   string    `gorm:"type:varchar(10);column:vin" json:"vin"`
+	ProductionYear        uint16    `gorm:"type:uint16;column:productionyear" json:"prod_year"`
+	Color                 string    `gorm:"type:varchar(32);column:color" json:"color"`
+	VehicleType           string    `gorm:"type:varchar(32);column:vehicletype" json:"veh_type"`
+	VehicleBody           string    `gorm:"type:varchar(32);column:vehiclebody" json:"veh_body"`
+	Purpose               string    `gorm:"type:varchar(32);column:purpose" json:"purpose"`
+	FuelType              string    `gorm:"type:varchar(32);column:fueltype" json:"fuel_type"`
+	EngineCapacity        uint16    `gorm:"type:uint16;column:enginecapacity" json:"eng_cap"`
+	OwnWeight             uint16    `gorm:"type:uint16;column:ownweight" json:"own_weight"`
+	TotalWeight           uint16    `gorm:"type:uint16;column:totalweight" json:"total_weight"`
+	NewRegistrationNumber string    `gorm:"type:varchar(10);column:newregistrationnumber" json:"new_reg_num"`
 }
