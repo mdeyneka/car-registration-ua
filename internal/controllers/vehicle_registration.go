@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -47,14 +48,21 @@ func PostVehicleRegistrations(c *gin.Context) {
 }
 
 func GetVehicleRegistrationByID(c *gin.Context) {
-	/*
-		id := c.Param("id")
-		for _, a := range database.VehRegistrations {
-			if a.ID == id {
-				c.IndentedJSON(http.StatusOK, a)
-				return
-			}
-		}
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "vehicle registration not found"})
-	*/
+	id := c.Param("id")
+	var vehicle models.VehicleRegistration
+	status := dbConnect.Where("id = ?", id).First(&vehicle)
+
+	if status.Error != nil {
+		log.Printf("Error while getting vehicle registration with ID: %s - %v\n", id, status.Error)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"message": fmt.Sprintf("Error while getting vehicle registration with ID: %s - %v", id, status.Error),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"data":   vehicle,
+	})
 }
