@@ -14,7 +14,7 @@ func Init(class interface{}) *gorm.DB {
 
 	url := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d", cfg.DbHost, cfg.DbUser, cfg.DbPassword, cfg.DbName, cfg.DbPort)
 
-	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(url), &gorm.Config{TranslateError: true})
 
 	if err != nil {
 		log.Fatalln(err)
