@@ -118,7 +118,7 @@ func PostBatchVehicleRegistrations(c *gin.Context) {
 			return
 		}
 
-		departmentCode, err := strconv.ParseUint(record[5], 10, 16)
+		departmentCode, err := strconv.ParseUint(record[5], 10, 32)
 		if err != nil {
 			text := fmt.Sprintf("At line %d in parameter departmentCode error: %s", line, err.Error())
 			c.JSON(http.StatusBadRequest, text)
@@ -167,7 +167,7 @@ func PostBatchVehicleRegistrations(c *gin.Context) {
 			OperationCode:         uint16(operationCode),
 			OperationName:         record[3],
 			RegistrationDate:      registrationDate,
-			DepartmentCode:        uint16(departmentCode),
+			DepartmentCode:        uint32(departmentCode),
 			DepartmentName:        record[6],
 			VehicleBrand:          record[7],
 			VehicleModel:          record[8],
@@ -187,7 +187,6 @@ func PostBatchVehicleRegistrations(c *gin.Context) {
 		vehicleRegistrations = append(vehicleRegistrations, vehreg)
 	}
 	result := dbConnect.CreateInBatches(&vehicleRegistrations, 1000)
-	//result := dbConnect.Create(&vehicleRegistrations)
 
 	if result.Error != nil {
 		c.JSON(http.StatusExpectationFailed, result.Error)
