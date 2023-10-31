@@ -42,19 +42,6 @@ func GetVehicleRegistrations(c *gin.Context) {
 	})
 }
 
-func PostVehicleRegistrations(c *gin.Context) {
-	/*
-		var newVehicleRegistration models.VehicleRegistration
-
-		if err := c.BindJSON(&newVehicleRegistration); err != nil {
-			return
-		}
-
-		database.VehRegistrations = append(database.VehRegistrations, newVehicleRegistration)
-		c.IndentedJSON(http.StatusCreated, newVehicleRegistration)
-	*/
-}
-
 func GetVehicleRegistrationByID(c *gin.Context) {
 	id := c.Param("id")
 	var vehicle models.VehicleRegistration

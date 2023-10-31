@@ -15,7 +15,6 @@ func main() {
 	{
 		v1_group.GET("/vehicle_registrations", controllers.GetVehicleRegistrations)
 		v1_group.GET("/vehicle_registrations/:id", controllers.GetVehicleRegistrationByID)
-		v1_group.POST("/vehicle_registrations", controllers.PostVehicleRegistrations)
 		v1_group.POST("/vehicle_registrations/batchload", controllers.PostBatchVehicleRegistrations)
 	}
 
