@@ -25,8 +25,40 @@ func InitiateDB(db *gorm.DB) {
 }
 
 func GetVehicleRegistrations(c *gin.Context) {
+
+	idStr := c.Request.URL.Query().Get("id")
+
+	if idStr != "" {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			log.Printf("Parameter ID should be int value. ID is: %s\n", idStr)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status":  http.StatusBadRequest,
+				"message": fmt.Sprintf("Parameter ID should be int value. ID is: %s", idStr),
+			})
+			return
+		}
+
+		var vehicle models.VehicleRegistration
+		status := dbConnect.Where("ID = ?", id).First(&vehicle)
+
+		if status.Error != nil {
+			log.Printf("Error while getting vehicle registration with ID: %d - %v\n", id, status.Error)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status":  http.StatusInternalServerError,
+				"message": fmt.Sprintf("Error while getting vehicle registration with ID: %d - %v", id, status.Error),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"status": http.StatusOK,
+			"data":   vehicle,
+		})
+		return
+	}
+
 	var vehicles []models.VehicleRegistration
-	status := dbConnect.Find(&vehicles)
+	status := dbConnect.Limit(100).Find(&vehicles)
 	if status.Error != nil {
 		log.Printf("Error while getting all vehicle registration, Reason: %v\n", status.Error)
 		c.JSON(http.StatusInternalServerError, gin.H{
