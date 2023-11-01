@@ -13,9 +13,8 @@ func main() {
 	router := gin.Default()
 	v1_group := router.Group("/v1")
 	{
-		v1_group.GET("/vehicle_registrations", controllers.GetVehicleRegistrations)
-		v1_group.GET("/vehicle_registrations/:id", controllers.GetVehicleRegistrationByID)
-		v1_group.POST("/vehicle_registrations/batchload", controllers.PostBatchVehicleRegistrations)
+		v1_group.GET("/vehicle-registrations", controllers.GetVehicleRegistrations)
+		v1_group.POST("/vehicle-registrations/batchload", controllers.PostBatchVehicleRegistrations)
 	}
 
 	router.Run("localhost:8080")

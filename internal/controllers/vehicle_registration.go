@@ -42,26 +42,6 @@ func GetVehicleRegistrations(c *gin.Context) {
 	})
 }
 
-func GetVehicleRegistrationByID(c *gin.Context) {
-	id := c.Param("id")
-	var vehicle models.VehicleRegistration
-	status := dbConnect.Where("id = ?", id).First(&vehicle)
-
-	if status.Error != nil {
-		log.Printf("Error while getting vehicle registration with ID: %s - %v\n", id, status.Error)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  http.StatusInternalServerError,
-			"message": fmt.Sprintf("Error while getting vehicle registration with ID: %s - %v", id, status.Error),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"status": http.StatusOK,
-		"data":   vehicle,
-	})
-}
-
 func PostBatchVehicleRegistrations(c *gin.Context) {
 	var form Form
 
