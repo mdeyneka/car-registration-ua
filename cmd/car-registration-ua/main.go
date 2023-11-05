@@ -9,6 +9,7 @@ import (
 
 func main() {
 	db := database.Init(config.Dbconfig)
+	database.Migrate(db)
 	controllers.InitiateDB(db)
 	router := gin.Default()
 	v1_group := router.Group("/v1")
