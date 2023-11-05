@@ -20,57 +20,38 @@ type Form struct {
 	CSVFile *multipart.FileHeader `form:"file" binding:"required"`
 }
 
+type VehicleRegistrationRequest struct {
+	Id                    int       `form:"id,default=0"`
+	Vin                   string    `form:"vin"`
+	Newregistrationnumber string    `form:"newRegNumber"`
+	Registrationdate      time.Time `form:"registrationDate" time_format:"2006-01-02" time_utc:"2"`
+}
+
 func InitiateDB(db *gorm.DB) {
 	dbConnect = db
 }
 
 func GetVehicleRegistrations(c *gin.Context) {
+	var vehicleRegistrationsRequest VehicleRegistrationRequest
+	var vehicles []models.VehicleRegistration
 
-	idStr := c.Request.URL.Query().Get("id")
-
-	if idStr != "" {
-		id, err := strconv.Atoi(idStr)
-		if err != nil {
-			log.Printf("Parameter ID should be int value. ID is: %s\n", idStr)
-			c.JSON(http.StatusBadRequest, gin.H{
-				"status":  http.StatusBadRequest,
-				"message": fmt.Sprintf("Parameter ID should be int value. ID is: %s", idStr),
-			})
-			return
-		}
-
-		var vehicle models.VehicleRegistration
-		status := dbConnect.Where("ID = ?", id).First(&vehicle)
-
-		if status.Error != nil {
-			log.Printf("Error while getting vehicle registration with ID: %d - %v\n", id, status.Error)
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":  http.StatusInternalServerError,
-				"message": fmt.Sprintf("Error while getting vehicle registration with ID: %d - %v", id, status.Error),
-			})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{
-			"status": http.StatusOK,
-			"data":   vehicle,
-		})
+	if err := c.ShouldBindQuery(&vehicleRegistrationsRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	var vehicles []models.VehicleRegistration
-	status := dbConnect.Limit(100).Find(&vehicles)
-	if status.Error != nil {
-		log.Printf("Error while getting all vehicle registration, Reason: %v\n", status.Error)
+	err := dbConnect.Limit(100).Find(&vehicles, vehicleRegistrationsRequest).Error
+	if err != nil {
+		log.Printf("Can't find anything %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status":  http.StatusInternalServerError,
-			"message": "Something went wrong",
+			"message": fmt.Sprintf("Can't find anything %v", err),
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"status":  http.StatusOK,
-		"message": "All Vehicle registrations",
-		"data":    vehicles,
+		"status": http.StatusOK,
+		"data":   vehicles,
 	})
 }
 
