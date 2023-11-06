@@ -10,7 +10,7 @@ type VehicleRegistration struct {
 	RegistrationAddress   string    `gorm:"type:varchar(10);column:registrationaddress" json:"reg_address"`
 	OperationCode         uint16    `gorm:"type:smallint;column:operationcode" json:"op_code"`
 	OperationName         string    `gorm:"type:varchar(255);column:operationname" json:"op_name"`
-	RegistrationDate      time.Time `gorm:"type:time;column:registrationdate" json:"reg_date"`
+	RegistrationDate      time.Time `gorm:"type:date;column:registrationdate" json:"reg_date"`
 	DepartmentCode        uint32    `gorm:"type:int;column:departmentcode" json:"dep_code"`
 	DepartmentName        string    `gorm:"type:varchar(256);column:departmentname" json:"dep_name"`
 	VehicleBrand          string    `gorm:"type:varchar(64);column:brand" json:"veh_brand"`
